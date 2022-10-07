@@ -1,4 +1,5 @@
 const path = require('path');
+const { DefinePlugin } = require('webpack');
 
 module.exports = {
   entry: {
@@ -17,6 +18,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new DefinePlugin({
+      SIP_PASSWORD: JSON.stringify(process.env.SIP_PASSWORD)
+    })
+  ],
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
     extensionAlias: {

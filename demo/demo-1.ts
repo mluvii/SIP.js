@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 import { SimpleUser, SimpleUserDelegate, SimpleUserOptions } from "../lib/platform/web/index.js";
 import { getAudio, getButton, getButtons, getInput, getSpan } from "./demo-utils.js";
+declare const SIP_PASSWORD: string;
 
 const serverSpan = getSpan("server");
 const targetSpan = getSpan("target");
@@ -16,15 +17,17 @@ const holdCheckbox = getInput("hold");
 const muteCheckbox = getInput("mute");
 
 // WebSocket Server URL
-const webSocketServer = "wss://edge.sip.onsip.com";
+const webSocketServer = "wss://asteriskmluvii.mluvii.com/ws";
 serverSpan.innerHTML = webSocketServer;
 
 // Destination URI
-const target = "sip:echo@sipjs.onsip.com";
+const target = "sip:12345@asteriskmluvii.mluvii.com";
 targetSpan.innerHTML = target;
 
 // Name for demo user
-const displayName = "SIP.js Demo";
+const displayName = "Štěpán";
+const authorizationUsername = "stepan";
+const authorizationPassword = SIP_PASSWORD;
 
 // SimpleUser delegate
 const simpleUserDelegate: SimpleUserDelegate = {
@@ -58,6 +61,7 @@ const simpleUserDelegate: SimpleUserDelegate = {
 
 // SimpleUser options
 const simpleUserOptions: SimpleUserOptions = {
+  aor: "sip:" + authorizationUsername + "@mluvii",
   delegate: simpleUserDelegate,
   media: {
     remote: {
@@ -66,7 +70,9 @@ const simpleUserOptions: SimpleUserOptions = {
   },
   userAgentOptions: {
     // logLevel: "debug",
-    displayName
+    displayName,
+    authorizationPassword,
+    authorizationUsername
   }
 };
 
@@ -81,6 +87,7 @@ connectButton.addEventListener("click", () => {
   hangupButton.disabled = true;
   simpleUser
     .connect()
+    .then(() => simpleUser.register())
     .then(() => {
       connectButton.disabled = true;
       disconnectButton.disabled = false;
