@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './.env' });
 const path = require('path');
 const { DefinePlugin } = require('webpack');
 
@@ -20,7 +21,8 @@ module.exports = {
   },
   plugins: [
     new DefinePlugin({
-      SIP_PASSWORD: JSON.stringify(process.env.SIP_PASSWORD)
+      SIP_PASSWORD: JSON.stringify(process.env.SIP_PASSWORD),
+      SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN)
     })
   ],
   resolve: {
